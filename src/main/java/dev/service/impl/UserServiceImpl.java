@@ -1,6 +1,7 @@
 package dev.service.impl;
 
 import dev.dao.UserDao;
+import dev.dto.RegisterResult;
 import dev.entity.User;
 import dev.service.UserService;
 import org.omg.CORBA.SystemException;
@@ -24,26 +25,30 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Boolean signUp(User user){
+    public RegisterResult register(User user){
         if(user.getUserEmail() != null && checkUserEmailIsExist(user.getUserName())){
-            return false;
+            Log.info("邮箱已被使用");
+            return new RegisterResult(false, "邮箱已被使用");
         }
         if (checkUserNameIsExist(user.getUserName())){
-            return false;
+            Log.info("用户名已被使用");
+            return new RegisterResult(false, "用户名已使用");
         }
 
         try{
             int insertCount = userDao.register(user);
             if(insertCount > 0){
-                return true;
+                Log.info("注册成功");
+                return new RegisterResult(true, "注册成功");
             }
             else {
                 Log.info("用户注册错误");
+                return new RegisterResult(false, "用户注册错误");
             }
         }catch (Exception e){
             Log.error(e.getMessage(), e);
+            return new RegisterResult(false, "e");
         }
-        return false;
     }
 
     @Override
@@ -72,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Boolean signIn(User user) {
+    public Boolean login(User user) {
         User newUser = userDao.selectByUserName(user.getUserName());
         if (newUser == null) {
             Log.info("登录失败，用户不存在");
