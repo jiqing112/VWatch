@@ -2,8 +2,11 @@ package dev.service;
 
 import dev.entity.User;
 
-import java.util.List;
 
 public interface UserService {
-    List<User> getUserList(int offset, int limit);
+    Boolean signUp(User user);
+    Boolean checkUserNameIsExist(String userName);
+    Boolean checkUserEmailIsExist(String userEmail);
+
+    Boolean signIn(User user);
 }

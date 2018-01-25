@@ -31,4 +31,10 @@
         WHERE user_name = #{userName}
     </select>
 
+    <select id="selectByUserEmail" resultType="User">
+        SELECT *
+        FROM user
+        WHERE user_email = #{userEmail}
+    </select>
+
 </mapper>

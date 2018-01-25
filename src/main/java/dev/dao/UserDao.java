@@ -22,5 +22,6 @@ public interface UserDao {
      */
     User selectById(long userId);
     User selectByUserName(String userName);
+    User selectByUserEmail(String userEmail);
 
 }

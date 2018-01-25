@@ -21,14 +21,4 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String list(Model model, Integer offset, Integer limit) {
-        Log.info("invoke----------/user/list");
-        offset = offset == null ? 0 : offset;
-        limit = limit == null ? 50 : limit;
-        List<User> list = userService.getUserList(offset, limit);
-        model.addAttribute("userlist", list);
-        return "userlist";
-    }
-
 }
