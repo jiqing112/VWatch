@@ -10,7 +10,47 @@ public class User {
 
     private String userName;
 
+    private String userPassword;
+
+    private String userEmail;
+
     private long userPhone;
+
+    private String userGender;
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUserGender() {
+        return userGender;
+    }
+
+    public void setUserGender(String userGender) {
+        this.userGender = userGender;
+    }
+
+    public Date getUserBirthday() {
+        return userBirthday;
+    }
+
+    public void setUserBirthday(Date userBirthday) {
+        this.userBirthday = userBirthday;
+    }
+
+    private Date userBirthday;
 
     private Date createTime;
 
@@ -58,7 +98,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", userName=" + userName + ", userPhone=" + userPhone + ", createTime=" + createTime + ", score=" + score
+        return "User [userId=" + userId + ", userName=" + userName + ", createTime=" + createTime + ", score=" + score
                 + "]";
     }
 }

@@ -6,26 +6,21 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface UserDao {
-    /**
-     *根据手机号查询用户对象
-     *
-     * @param userPhone
-     * @return User
-     */
-    User queryByPhone(long userPhone);
 
     /**
-     * 根据偏移量查询用户列表
-     *
-     * @param offset
-     * @param limit
-     * @return List<User>
+     *注册
      */
-    List<User> queryAll(@Param("offset") int offset, @Param("limit") int limit);
+    int register(User user);
 
     /**
-     *增加积分
-     * @param add
+     *更新信息
      */
-    void addScore(@Param("add")int add);
+    int updateInfoById(User user);
+
+    /**
+     *选择用户
+     */
+    User selectById(long userId);
+    User selectByUserName(String userName);
+
 }

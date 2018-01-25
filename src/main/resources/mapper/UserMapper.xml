@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dev.dao.UserDao">
-    <select id="queryByPhone" resultType="User">
-        SELECT * FROM user
-        WHERE user_phone = #{userPhone} limit 1
-    </select>
+    <insert id="register" parameterType="User">
+      INSERT INTO
+      user(`user_id`, `user_name`, `user_password`, `user_email`, `user_phone`)
+      VALUES (#{userId}, #{userName}, #{userPassword}, #{userEmail}, #{userPhone})
+    </insert>
 
-    <select id="queryAll" resultType="User">
-        SELECT * FROM user
-        ORDER BY create_time
-        LIMIT #{offset}, #{limit}
-    </select>
-
-    <update id="addScore">
+    <update id="updateInfoById" parameterType="User">
         UPDATE user
-        SET score = score + #{add}
+        SET
+            user_name = #{userName},
+            user_password = #{userPassword},
+            user_gender = #{userGender},
+            user_phone = #{userPhone},
+            user_email = #{userEmail},
+            user_birthday = #{userBirthday}
+        WHERE user_id = #{userId}
     </update>
+    
+    <select id="selectById" resultType="User">
+        SELECT *
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="selectByUserName" resultType="User">
+        SELECT *
+        FROM user
+        WHERE user_name = #{userName}
+    </select>
+
 </mapper>
