@@ -34,14 +34,6 @@
         </tr>
         <tr>
             <td>
-                <form:label path="userBirthday">出生日期</form:label>
-            </td>
-            <td>
-                <form:input path="userBirthday" name="userBirthday" id="userBirthday" />
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <form:label path="userEmail">邮箱</form:label>
             </td>
             <td>
@@ -65,7 +57,7 @@
         <tr></tr>
         <tr>
             <td></td>
-            <td><a href="../index.jsp">Home</a>
+            <td><a href="/">主页</a>
             </td>
         </tr>
     </table>

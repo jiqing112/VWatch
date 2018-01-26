@@ -8,9 +8,9 @@
 <body>
 <table align="center">
     <tr>
-        <td><a href="login">Login</a>
+        <td><a href="login">登录</a>
         </td>
-        <td><a href="register">Register</a>
+        <td><a href="/user/register">注册</a>
         </td>
     </tr>
 </table>

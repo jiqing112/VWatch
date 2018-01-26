@@ -26,6 +26,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RegisterResult register(User user){
+        if(user.getUserName() == null || user.getUserPassword() == null){
+            Log.info("用户名或密码为空");
+            return new RegisterResult(false, "用户名或密码为空");
+        }
+
         if(user.getUserEmail() != null && checkUserEmailIsExist(user.getUserName())){
             Log.info("邮箱已被使用");
             return new RegisterResult(false, "邮箱已被使用");
