@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class User {
     private long userId;
-
+    
     private String userName;
 
     private String userPassword;

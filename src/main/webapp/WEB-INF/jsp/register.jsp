@@ -6,7 +6,7 @@
     <title>Registration</title>
 </head>
 <body>
-<form:form id="regForm" modelAttribute="user" action="/user/registerProcess" method="post">
+<form:form id="regForm" modelAttribute="user" action="/user/register" method="post">
     <table align="center">
         <tr>
             <td>
@@ -15,6 +15,9 @@
             <td>
                 <form:input path="userName" name="userName" id="userName" />
             </td>
+            <td>
+                <form:errors path="userName"/>
+            </td>
         </tr>
         <tr>
             <td>
@@ -22,6 +25,9 @@
             </td>
             <td>
                 <form:password path="userPassword" name="userPassword" id="userPassword" />
+            </td>
+            <td>
+                <form:errors path="userPassword"/>
             </td>
         </tr>
         <tr>

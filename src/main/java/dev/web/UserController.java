@@ -3,11 +3,15 @@ package dev.web;
 import dev.dto.RegisterResult;
 import dev.entity.User;
 import dev.service.UserService;
+import dev.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +25,13 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
+    //注册校验器
+    @InitBinder
+    public void initBainder(DataBinder binder){
+        binder.replaceValidators(new UserValidator());
+
+    }
+
     private final Logger Log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -33,6 +44,18 @@ public class UserController {
         mav.addObject("user", new User());
         return mav;
     }
+
+    @RequestMapping(value = "/register1", method = RequestMethod.POST)
+    public String checkRegister(@Validated User user, BindingResult br){
+        if (br.hasErrors()){
+            return "register";
+        }
+        else {
+            return "registerProcess";
+        }
+    }
+
+
     @RequestMapping(value = "/registerProcess", method = RequestMethod.POST)
     public ModelAndView addUser(HttpServletRequest request, HttpServletResponse response,
                                 @ModelAttribute("user") User user) {
