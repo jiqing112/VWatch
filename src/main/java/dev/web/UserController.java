@@ -45,13 +45,14 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/register1", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String checkRegister(@Validated User user, BindingResult br){
+        Log.info("web:check register");
         if (br.hasErrors()){
             return "register";
         }
         else {
-            return "registerProcess";
+            return "welcome";
         }
     }
 
