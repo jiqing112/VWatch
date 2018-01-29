@@ -1,5 +1,10 @@
 package dev.entity;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -7,11 +12,15 @@ import java.util.Date;
  */
 public class User {
     private long userId;
-    
+
+    @NotEmpty(message = "用户名不能为空")
     private String userName;
 
+    @NotEmpty(message = "用户密码不能为空")
+    @Size(min = 3, max = 18, message = "密码长度应在3到18个字符以内")
     private String userPassword;
 
+    @Email(message = "请输入正确的邮箱地址")
     private String userEmail;
 
     private long userPhone;

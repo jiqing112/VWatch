@@ -3,7 +3,6 @@ package dev.web;
 import dev.dto.RegisterResult;
 import dev.entity.User;
 import dev.service.UserService;
-import dev.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +24,6 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    //注册校验器
-    @InitBinder
-    public void initBainder(DataBinder binder){
-        binder.replaceValidators(new UserValidator());
-
-    }
-
     private final Logger Log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -46,29 +38,27 @@ public class UserController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String checkRegister(@Validated User user, BindingResult br){
+    public String checkRegister(
+            @Validated User user,
+            BindingResult br){
+
         Log.info("web:check register");
         if (br.hasErrors()){
             return "register";
         }
-        else {
-            return "welcome";
-        }
-    }
 
+        boolean isUserNameExist = this.userService.checkUserNameIsExist(user.getUserName());
+        // 如果用户名已存在，返回添加用户的页面
+        if (isUserNameExist) {
+            // 向BindingResult添加用户已存在的校验错误
+            br.rejectValue("userName", "该用户名已存在", "该用户名已存在");
+            return "register";
+        }
 
-    @RequestMapping(value = "/registerProcess", method = RequestMethod.POST)
-    public ModelAndView addUser(HttpServletRequest request, HttpServletResponse response,
-                                @ModelAttribute("user") User user) {
-        Log.info("web:registerProcess");
-        RegisterResult registerResult = userService.register(user);
-        if (registerResult.getSuccess()){
-            return new ModelAndView("welcome", "userName", user.getUserName());
-        }
-        else {
-            return new ModelAndView("registerError", "msg", registerResult.getMsg());
-        }
+        this.userService.register(user);
+        return "welcome";
     }
+    
 
 
     /*
