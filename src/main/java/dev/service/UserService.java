@@ -1,5 +1,6 @@
 package dev.service;
 
+import dev.dto.LoginResult;
 import dev.dto.RegisterResult;
 import dev.entity.User;
 
@@ -10,5 +11,5 @@ public interface UserService {
     Boolean checkUserNameIsExist(String userName);
     Boolean checkUserEmailIsExist(String userEmail);
 
-    Boolean login(User user);
+    LoginResult login (User user);
 }

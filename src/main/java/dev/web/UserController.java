@@ -1,5 +1,6 @@
 package dev.web;
 
+import dev.dto.LoginResult;
 import dev.dto.RegisterResult;
 import dev.entity.User;
 import dev.service.UserService;
@@ -61,28 +62,28 @@ public class UserController {
     
 
 
-    /*
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView showLogin(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView mav = new ModelAndView("login");
-        mav.addObject("login", new Login());
+        mav.addObject("user", new User());
         return mav;
     }
     @RequestMapping(value = "/loginProcess", method = RequestMethod.POST)
     public ModelAndView loginProcess(HttpServletRequest request, HttpServletResponse response,
-                                     @ModelAttribute("login") Login login) {
+                                     @ModelAttribute("user") User user) {
         ModelAndView mav = null;
-        User user = userService.validateUser(login);
-        if (null != user) {
+        LoginResult loginResult = userService.login(user);
+        if (loginResult.getSuccess()) {
             mav = new ModelAndView("welcome");
-            mav.addObject("firstname", user.getFirstname());
+            mav.addObject("userName", user.getUserName());
         } else {
             mav = new ModelAndView("login");
-            mav.addObject("message", "Username or Password is wrong!!");
+            mav.addObject("message", loginResult.getMsg());
         }
         return mav;
     }
-    */
+
 
 }
 

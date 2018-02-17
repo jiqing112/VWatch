@@ -1,6 +1,7 @@
 package dev.service.impl;
 
 import dev.dao.UserDao;
+import dev.dto.LoginResult;
 import dev.dto.RegisterResult;
 import dev.entity.User;
 import dev.service.UserService;
@@ -82,17 +83,17 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Boolean login(User user) {
+    public LoginResult login(User user) {
         User newUser = userDao.selectByUserName(user.getUserName());
         if (newUser == null) {
             Log.info("登录失败，用户不存在");
-            return false;
+            return new LoginResult(false, "登录失败，用户不存在");
         }
         if (!user.getUserPassword().equals(newUser.getUserPassword())) {
             Log.info("登录失败，账户或密码错误");
-            return false;
+            return new LoginResult(false, "登录失败，账户或密码错误");
         } else {
-            return true;
+            return new LoginResult(true, "登录成功");
         }
     }
 }
