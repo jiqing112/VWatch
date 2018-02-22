@@ -5,7 +5,6 @@ import dev.dto.LoginResult;
 import dev.dto.RegisterResult;
 import dev.entity.User;
 import dev.service.UserService;
-import org.omg.CORBA.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-    //TODO redis缓存
+
 
 
 

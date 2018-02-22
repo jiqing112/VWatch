@@ -1,5 +1,6 @@
 package dev.entity;
 
+import dev.validator.GenderName;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -25,6 +26,7 @@ public class User {
 
     private long userPhone;
 
+    @GenderName
     private String userGender;
 
     public String getUserPassword() {
