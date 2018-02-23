@@ -27,5 +27,16 @@
         <property name="poolConfig" ref="jedisPoolConfig" />
     </bean>
 
+    <!-- redisTemplate配置 -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisConnectionFactory" />
+        <property name="keySerializer" ref="stringRedisSerializer" />
+        <property name="hashKeySerializer" ref="stringRedisSerializer" />
+        <property name="valueSerializer" ref="stringRedisSerializer" />
+        <property name="hashValueSerializer" ref="stringRedisSerializer" />
+    </bean>
+
+    <bean name="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+
 
 </beans>

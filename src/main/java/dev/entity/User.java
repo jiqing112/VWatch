@@ -6,12 +6,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author 用户
  */
-public class User {
+public class User implements Serializable {
+
     private long userId;
 
     @NotEmpty(message = "用户名不能为空")

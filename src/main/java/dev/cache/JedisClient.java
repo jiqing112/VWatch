@@ -1,69 +1,100 @@
 package dev.cache;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Repository;
 
-@Component
+import java.io.*;
+
+@Repository
 public class JedisClient {
 
-    /**
-     * 添加
-     * @param key
-     * @param value
-     * @return
-     * @throws Exception
-     */
-    public Boolean add(String key,String value) throws Exception{
-        ApplicationContext context = new ClassPathXmlApplicationContext("spring-redis.xml");
-        JedisPool pool = (JedisPool) context.getBean("jedisConnectionFactory");
-        Jedis jedis = null;
-        try {
-            jedis = pool.getResource();
-            if(jedis.exists(key)){
-                throw new Exception(String.format("key (%s) 已存在 ",key));
-            }
-            jedis.set(key,value);
+    @Autowired
+    private RedisTemplate redisTemplate;
 
-        }catch (Exception e){
-            throw e;
+
+    public void put(Object key, Object value) {
+        if(null == value) {
+            return;
         }
-        finally {
-            if(jedis!=null){
-                jedis.close();
+
+        if(value instanceof String) {
+            if(StringUtils.isEmpty(value.toString())) {
+                return;
             }
         }
-        pool.destroy();
-        return true;
+
+        final String keyf = key + "";
+        final Object valuef = value;
+        final long liveTime = 86400;
+
+        redisTemplate.execute(new RedisCallback<Long>() {
+            public Long doInRedis(RedisConnection connection)
+                    throws DataAccessException {
+                byte[] keyb = keyf.getBytes();
+                byte[] valueb = toByteArray(valuef);
+                connection.set(keyb, valueb);
+                if (liveTime > 0) {
+                    connection.expire(keyb, liveTime);
+                }
+                return 1L;
+            }
+        });
     }
 
-    /**
-     * 获取值
-     * @param key
-     * @return
-     * @throws Exception
-     */
-    public String get(String key) throws Exception{
-        ApplicationContext context = new ClassPathXmlApplicationContext("spring-redis.xml");
-        JedisPool pool = (JedisPool) context.getBean("jedisConnectionFactory");
-        Jedis jedis = null;
-        String result = "";
-        try {
-            jedis = pool.getResource();
-            result = jedis.get(key);
-        }catch (Exception e){
-            throw e;
-        }
-        finally {
-            if(jedis!=null){
-                jedis.close();
+    public Object get(Object key) {
+        final String keyf = (String) key;
+        Object object;
+        object = redisTemplate.execute(new RedisCallback<Object>() {
+            public Object doInRedis(RedisConnection connection)
+                    throws DataAccessException {
+
+                byte[] key = keyf.getBytes();
+                byte[] value = connection.get(key);
+                if (value == null) {
+                    return null;
+                }
+                return toObject(value);
+
             }
-        }
-        pool.destroy();
-        return result;
+        });
+
+        return object;
     }
 
+    private Object toObject(byte[] bytes) {
+        Object obj = null;
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            obj = ois.readObject();
+            ois.close();
+            bis.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return obj;
+    }
+
+    private byte[] toByteArray(Object obj) {
+        byte[] bytes = null;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(obj);
+            oos.flush();
+            bytes = bos.toByteArray();
+            oos.close();
+            bos.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return bytes;
+    }
 }

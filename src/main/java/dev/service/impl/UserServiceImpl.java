@@ -1,6 +1,6 @@
 package dev.service.impl;
 
-import dev.cache.JedisClient;
+//import dev.cache.JedisClient;
 import dev.dao.UserDao;
 import dev.dto.LoginResult;
 import dev.dto.RegisterResult;
@@ -9,6 +9,7 @@ import dev.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +22,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    /*
     @Autowired
     private JedisClient jedisClient;
+    */
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public RegisterResult register(User user){
@@ -93,6 +99,32 @@ public class UserServiceImpl implements UserService {
             return new LoginResult(false, "登录失败，账户或密码错误");
         } else {
             return new LoginResult(true, "登录成功");
+        }
+    }
+
+    @Override
+    public User getUserById(long userId) {
+        User user = (User) redisTemplate.opsForValue().get(userId);
+        if(user == null){
+            user = userDao.selectById(userId);
+            redisTemplate.opsForValue().set(userId, user);
+            return user;
+        }
+        else {
+            return user;
+        }
+    }
+
+    @Override
+    public User getUserByName(String userName) {
+        User user = (User) redisTemplate.opsForValue().get(userName);
+        if(user == null){
+            user = userDao.selectByUserName(userName);
+            redisTemplate.opsForValue().set(userName, user);
+            return user;
+        }
+        else {
+            return user;
         }
     }
 }
