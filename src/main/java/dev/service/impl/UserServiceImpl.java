@@ -1,5 +1,6 @@
 package dev.service.impl;
 
+import dev.cache.JedisClient;
 import dev.dao.UserDao;
 import dev.dto.LoginResult;
 import dev.dto.RegisterResult;
@@ -20,9 +21,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-
-
-
+    @Autowired
+    private JedisClient jedisClient;
 
     @Override
     public RegisterResult register(User user){

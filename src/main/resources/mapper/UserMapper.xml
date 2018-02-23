@@ -20,21 +20,31 @@
     </update>
     
     <select id="selectById" resultType="User">
-        SELECT *
-        FROM user
-        WHERE user_id = #{userId}
+        SELECT *  FROM user
+        <where>
+            <if test="user_id != null">
+                user_id = #{userId}
+            </if>
+        </where>
     </select>
 
     <select id="selectByUserName" resultType="User">
-        SELECT *
-        FROM user
-        WHERE user_name = #{userName}
+        SELECT * FROM user
+        <where>
+            <if test="user_name != null">
+                user_name = #{userName}
+            </if>
+        </where>
     </select>
 
     <select id="selectByUserEmail" resultType="User">
         SELECT *
         FROM user
-        WHERE user_email = #{userEmail}
+        <where>
+            <if test="user_email != null">
+                user_email = #{userEmail}
+            </if>
+        </where>
     </select>
 
 </mapper>
